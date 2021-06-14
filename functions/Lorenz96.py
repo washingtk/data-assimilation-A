@@ -12,7 +12,7 @@ def Lorenz96(x0, F):
     dxdt = (x[3:] - x[:-3]) * x[1:-2] - x[2:-1] + F
     return dxdt
 
-def L96(x, N=40):
+def L96(x, F):
     """
     Lorenz 96 model with constant forcing.
     Cited by "https://en.wikipedia.org/wiki/Lorenz_96_model"
@@ -25,8 +25,9 @@ def L96(x, N=40):
         number of sites
     """
     # Setting up vector
-    d = np.zeros(N)
+    x_ = np.zeros(x.shape)
+    N = len(x)
     # Loops over indices (with operations and Python underflow indexing handling edge cases)
     for i in range(N):
-        d[i] = (x[(i + 1) % N] - x[i - 2]) * x[i - 1] - x[i] + F
-    return d
+        x_[i] = (x[(i + 1) % N] - x[i - 2]) * x[i - 1] - x[i] + F
+    return x_
