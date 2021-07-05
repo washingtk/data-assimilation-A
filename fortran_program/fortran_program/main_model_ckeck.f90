@@ -7,7 +7,7 @@ program main
     real(8) :: XX(1:NN)
     real(8) :: XX_NEX(1:NN)
     character(500) :: dirname, filename, hfile
-    character(10) :: header(1:NN+1)
+    character(10) :: header(1:NN+2)
 
     !
     !check
@@ -53,29 +53,23 @@ program main
     do n_idx = 1, NN
         write(header(n_idx+1), '("X", i2.2)') n_idx
     end do
+    write(header(NN+2),'("time_step")')
     write(100,*) header
 
     !
     !initialize values 1
     !
-    ! do n_idx = 1, NN
-    !     XX(n_idx) = sin(1d0*n_idx/NN*2d0*pi)
-    ! end do
-
-    !
-    !initialize values 2
-    !
     XX(:) = FF
-    XX(20) = FF + 0.008d0
+    XX(20) = FF + FF * 0.001d0
 
     !
     !time step in model
     !
-    write(100,*) 0d0, XX
+    write(100,*) 0d0, XX, 0
     do t_idx = 1, t_max
         call runge_kutta_method(NN, XX, XX_NEX)
         XX = XX_NEX
-        write(100,*) dt*t_idx, XX
+        write(100,*) dt*t_idx, XX, t_idx
     end do
 
     close(100)

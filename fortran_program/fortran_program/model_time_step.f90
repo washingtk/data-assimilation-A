@@ -21,9 +21,12 @@ contains
         real(8) :: P_TMP(-1:n+1)
         integer :: j
         !
-        !initialize & boundary condition
+        !initialize
         !
         P_TMP(1:n) = P_IN(1:n)
+        !
+        !boundary condition
+        !
         P_TMP(-1)  = P_IN(n-1)
         P_TMP(0)   = P_IN(n)
         P_TMP(n+1) = P_IN(1)

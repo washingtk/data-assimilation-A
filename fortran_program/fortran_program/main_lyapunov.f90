@@ -2,14 +2,14 @@
 !リアプノフ指数の推定プログラム
 !===========================================
 program main
-    use global_variable, only: NN, t_1year, t_1day, dt
+    use global_variable, only: NN, t_1year, t_1day, dt, FF
     use model_functions
     use other_subroutines
     implicit none
-    integer, parameter :: sampling_num = 10000
-    integer, parameter :: t_dataset = 3*t_1year
-    integer, parameter :: t_lyapunov = 14*t_1day
-    real(8), parameter :: sigma = 5.0d0
+    integer, parameter :: sampling_num = 1000
+    integer, parameter :: t_dataset =  3*t_1year
+    integer, parameter :: t_lyapunov = 30*t_1day
+    real(8), parameter :: sigma = 0.01d0
     real(8) :: XX(1:NN)
     real(8) :: XX_NEX(1:NN)
     real(8) :: XX_ATRC(1:t_dataset, 1:NN)
@@ -44,8 +44,8 @@ program main
     !
     !make infodata file
     !
-    write(filename, '("result_N", i2.2, "FF", i2.2, f0.3, "std", i2.2, f0.2, ".txt")') &
-        & NN, int(FF), FF-int(FF), int(sigma), sigma-int(sigma)
+    write(filename, '("result_N", i2.2, "FF", i2.2, f0.3, "dt", i1.1, f0.4, "std", i2.2, f0.2, ".txt")') &
+        & NN, int(FF), FF-int(FF), int(dt), dt-int(dt), int(sigma), sigma-int(sigma)
     hfile    = trim(dirname)//"header_"//trim(filename)
     filename = trim(dirname)//trim(filename)
     open(200, file=hfile, status="replace")
@@ -130,7 +130,7 @@ program main
     write(*,*) 'info data in >> ', trim(hfile)
     open(100, file=filename, status="replace")
     do t_idx = 1, 7*t_1day
-        write(100,*) 1d0*t_idx/t_1day, sum(ERROR_GROW(:,t_idx))/sampling_num
+        write(100,*) 1d0*t_idx*dt, sum(ERROR_GROW(:,t_idx))/sampling_num
     end do
     close(100)
 
